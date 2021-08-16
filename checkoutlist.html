@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html  >
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Check List</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  
+  
+</head>
+
+	<script>
+$(document).ready(function () {
+   
+	var logid = localStorage.getItem("loginok");
+    var mydata=logid
+    if (logid == "" || logid === null) {
+            alert("Plz Login!");
+
+            location.replace("/");
+        } else {
+        
+	
+			$.ajax({
+            type: 'POST',
+            url: 'http://127.0.0.1:8000/checkoutlist',
+			dataType:"text",
+			data:mydata,
+                success: function(data) { 
+                    //alert(data);
+                    var obj = JSON.parse(data);
+                    console.log(obj)
+					
+                    $("#01").html(obj[0].cart);
+                    $("#02").html(obj[1].cart);
+                    $("#03").html(obj[2].cart);
+                    $("#04").html(obj[3].cart);
+                },
+            
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+		}
+		
+	 $(".delete").click(function () {
+	 
+	 var mydata = logid;
+		//alert(mydata);
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/deleteitem',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+                        alert("Cancelled");
+                        location.reload()
+                        //location.herf = "/checkoutlist";
+
+                    }    
+                    else  {
+ 
+                    }
+
+                    alert(data);
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+        });
+        
+        $(".deleteac").click(function () {
+	 
+	 var mydata = logid;
+		//alert(mydata);
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/deleteac',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+                        alert("Cancelled");
+                        localStorage.removeItem("loginok", logid);
+                        location.reload()
+                        //location.herf = "/checkoutlist";
+
+                    }    
+                    else  {
+ 
+                    }
+
+                    alert(data);
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+        });
+
+		//var mydata=getdata
+		
+			/*$.ajax({
+            type: 'POST',
+            url: 'http://127.0.0.1:8000/checkoutlist',
+			dataType:"text",
+			data:logid,
+			success: function(data) {
+			console.log(data) ;            
+            },
+            error: function(xhr, status, error) {
+                console.log('Error: ' + error.message);
+            }
+        });*/
+
+});
+
+</script>
+
+<body>
+  <section class="menu cid-qTkzRZLJNu" once="menu" id="menu1-0">
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
+           
+                <li class="nav-item">
+                    <a class="nav-link link text-black display-4" href="/userpage">
+                      
+                        UserPage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link text-black display-4" href="/favlist">
+                     
+                        Favourite List
+                    </a>    
+                </li>
+				   <li class="nav-item">
+                    <a class="nav-link link text-black display-4" href="/">
+                     
+                        Logout
+                    </a>    
+                </li>
+            </ul>
+           
+        </div>
+    </nav>
+</section>
+
+<section>
+                    <div class="col-25">
+                        <div class="container">
+						<img width="400" height="350" src="assets/images/cart.png" alt="..." />
+                            <h4>Baby Shop Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i></span></h4>
+                            <div id="show"></div>
+                           <table style="background-image:assets/images/cart.png;width:350px;height:350px;" border="1">
+                           <tr><td><center><p style="color:black" id='01'><a style="color:black">You Haven't added amything tp your cart!</a></p></td>   
+						   <td> <center><p style="color:black" id='02'><a style="color:black">You Haven't added amything tp your cart!</a></p></td></tr>
+                           <tr><td><center><p style="color:black" id='03'><a style="color:black">You Haven't added amything tp your cart!</a></p></td>   
+                           <td><center><p style="color:black" id='04'><a style="color:black">You Haven't added amything tp your cart!</a></p></td></tr>
+                           </table>  
+
+							<button class="delete" style="color:black" id="del1">Cancel All</button>
+    
+
+            </div>
+</section>
+
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/favlist">
+                	<span class="glyphicon glyphicon-fire"></span> 
+                	Baby Shop
+                </a>
+            </div>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/userpage">User Page</a>
+                    </li>
+                    <li>
+                        <a href="/favlist">Favourite List</a>
+                    </li>
+                    <li>
+                        <a href="/">Logout</a>
+                    </li>
+                </ul>
+             
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+
+        <div class="copyright">
+        	<div class="container">
+        		<p>Copyright &copy; Kwan </p>
+        	</div>
+        </div>
+	</footer>
+
+	
+    <!-- jQuery -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>

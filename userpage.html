@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html  >
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v4.10.0, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="assets/images/logo3.png" type="image/x-icon">
+  <meta name="description" content="">
+  
+  <title>User Pagwe</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script type = "text/javascript" src = "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script> 
+    <script type = "text/javascript" ></script> 
+  
+  
+</head>
+
+	<script>
+$(document).ready(function () {
+    
+	var logid = localStorage.getItem("loginok");
+	
+    var mydata=logid
+    if (logid == "" || logid === null) {
+            alert("Please Login Again");
+
+            location.replace("/");
+        } else {
+        
+	
+			$.ajax({
+            type: 'POST',
+            url: 'http://127.0.0.1:8000/userpage',
+			dataType:"text",
+			data:mydata,
+                success: function(data) { 
+
+                    var obj = JSON.parse(data);
+                    console.log(obj)
+
+                    $("#01").html(obj[0].login);
+                },
+            
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            }); 
+         //get HKO API to show the weatherForecast included forecastDate, week and forecastWeather
+            $.ajax({
+            type: 'GET',
+            url: 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en',
+			dataType: "text",
+                data: "",
+                success: function (data) {
+
+                    
+                    var obj = JSON.parse(data);
+     
+                    $("#02").html(obj.weatherForecast[0].forecastDate);
+                    $("#03").html(obj.weatherForecast[0].week);
+                    $("#04").html(obj.weatherForecast[0].forecastWeather);
+                    console.log(obj.weatherForecast[0].forecastDate);
+                    console.log(obj.weatherForecast)
+    
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+
+          // get Data Gov hk the real-time MTR train information the api show the TKO Line, yau tong station, train arriived and depart platform and time.
+            $.ajax({
+            type: 'GET',
+            url: 'https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php?line=TKL&sta=TKO',
+			dataType: "text",
+                data: "",
+                success: function (data) {
+          
+                    
+                    var obj = JSON.parse(data);
+                   console.log(data)
+           
+                    $("#05").html(obj.curr_time);
+                    $("#06").html(obj.data["TKL-TKO"].UP[0].plat);
+                    $("#07").html(obj.data["TKL-TKO"].UP[0].time);
+                    
+
+                    console.log(obj);
+                    console.log(obj.curr_time);
+                    console.log(obj.data["TKL-TKO"].UP[0].plat);
+                    console.log(obj.data["TKL-TKO"].UP[0].time);
+
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+
+		}
+	
+	// delete account
+        $(".deleteac").click(function () {
+	 
+     var mydata = logid;
+     
+	// delete item
+     $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/deleteitem',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+
+                        localStorage.removeItem("loginok", logid);
+                        location.reload()
+
+                    }    
+                    else  {
+ 
+                    }
+
+
+
+                    
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+	// delete account
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/deleteac',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+                        alert("Account was deleted");
+                        localStorage.removeItem("loginok", logid);
+                        location.reload()
+              
+
+                    }    
+                    else  {
+ 
+                    }
+
+
+
+                    alert(data);
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+
+        });
+		
+});
+
+
+
+</script>
+
+<body>
+ 
+    
+
+    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm">
+       
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="/favlist">
+                  
+                        Favourite List
+                    </a>
+                </li>    
+                <li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="/checkoutlist">
+                    
+                        Check Out List
+                    </a>
+                </li>
+            </ul>
+           
+        </div>
+    </nav>
+</section>
+
+ 
+
+ 
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/favlist">
+                	<span class="glyphicon glyphicon-fire"></span> 
+                	Baby Shop
+                </a>
+            </div>
+			
+			
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/favlist">Favourite List</a>
+                    </li>
+                    <li>
+                        <a href="/checkoutlist">Check Out List</a>
+                    </li>
+                    <li>
+                        <a href="/">Logout</a> 
+                    </li>
+                </ul>
+             
+            </div>
+			
+			
+			
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">User Detail
+             
+                </h1>
+            </div>
+
+        </div>
+           <div class="container">
+                                     <h4><label for="horns">User ID</label> 
+									 <li id='01'>User ID</li><span class="price" style="color:black"></h4>
+									 
+                                     <div id="show"></div>
+                                  <br>
+                                    <h4>The Hostname.Location</h4>
+                                    <li id="ip"></li>
+                                    <hr>
+
+                                    <h4>Weather<span class="price" style="color:black"><i class="fa fa-shopping-cart"></i></span></h4>
+							
+                                    <li>Tomorrow : <a id='02' style="color:black">API Data 1</a></li>
+				
+                                    <li id='03'>API Data 2</a>
+                                    <li id='04'>API Data 3</a></li>
+
+                                    <hr>
+
+                                    <h4>
+                                            Real-time MTR train information<br>
+                                    </h4>
+                                    
+                                       <li> Yau Tong Station</li><br>
+                                        　　　
+                                 
+                                    <p>Date and Time: </p>
+									<li id='05' style="color:black">API Data 4</li>
+                                    <li>Platform: <a id='06' style="color:black">API Data 5</a>
+                                    <li>Depart Time: <a id='07' style="color:black">API Data 6</a>
+                                    
+                                    <hr>
+
+<h4> <h2>Gelocation</h2>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="gelocation"></p>
+
+     <!-- google map api-->
+		<iframe width="560" height="315" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5296.450671101866!2d114.23619106552985!3d22.298335076626042!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDE3JzU0LjUiTiAxMTTCsDE0JzIwLjMiRQ!5e0!3m2!1szh-TW!2shk!4v1628998587130!5m2!1szh-TW!2shk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+     <!-- youtube api-->
+	     <iframe width="560" height="315" src="https://www.youtube.com/embed/el3N6qQjr-I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	
+
+<script>
+document.getElementById("ip").innerHTML = 
+"Page hostname is: " + window.location.hostname;
+
+const x = document.getElementById("gelocation");
+
+function getLocation() {
+  try {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } catch {
+    x.innerHTML = err;
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+}
+
+</script>
+
+	<h1> Google Search</h1>
+	<script async src="https://cse.google.com/cse.js?cx=83c706702babfc3a9"></script>
+<div class="gcse-search"></div>
+                                   <!----delete use account-->
+                                    <button class="deleteac" id="del1">Delete Account</button>
+
+                                </div>
+
+
+
+
+
+
+        <div class="copyright">
+        	<div class="container">
+        		<p>Copyright &copy; Kwan </p>
+        	</div>
+        </div>
+	</footer>
+
+	
+	
+	
+    <!-- jQuery -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+
+
+</body>
+</html>
+  
+
+</body>
+</html>

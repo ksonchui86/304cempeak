@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Favourite List</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+ 
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript"></script>
+
+
+</head>
+
+
+<script>
+    $(document).ready(function () {
+        alert("Welcome");
+        var logid = localStorage.getItem("loginok");
+        alert("UserID:"+logid);
+        if (logid == "" || logid === null) {
+            alert("Please Login");
+
+            location.replace("/");
+        } else {
+        }
+		
+		
+
+        $(".addfav").click(function () {
+		var content = $(this).parent().find('label').text();
+		var content_item = '';
+		var content_item1 = '';
+		var mydata="login="+logid+"&favlist="+content;
+		
+		if( localStorage.getItem(logid) == null ) {
+			content_item = content_item + content;
+	
+		}
+		else{
+			content_item1 = content_item + "," + content;
+
+		}
+		
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/favlist',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+                        alert("Item was Added");
+                        
+                        location.herf = "/favlist";
+
+                    }    
+                    else  {
+                        alert("Please Login Again");
+                        return;
+                    }
+
+
+
+                    alert(data);
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+        });
+
+
+
+
+
+        $(".addmore").click(function () {
+  
+            var content = $(this).parent().find('label').text();
+		    var content_item = '';
+		    var content_item1 = '';
+		    var mydata="login="+logid+"&favlist="+content;
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:8000/favlistaddmore',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "success") {
+                        alert("All Added!");
+                        
+                        location.herf = "/favlist";
+
+                    }    
+                    else  {
+                        alert("PlzLoginAngin!");
+                        return;
+                    }
+
+                    alert(data);
+                    console.log('kwan');
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error.message);
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+    });
+
+</script>
+
+<body>
+
+    
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">
+                	<span class="glyphicon glyphicon-fire"></span> 
+                	Baby Shop
+                </a>
+            </div>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/userpage">User Page</a>
+                    </li>
+                    <li>
+                        <a href="/checkoutlist">Check Out List</a>
+                    </li>
+               <li>
+                        <a href="/">Logout</a>
+                    </li>
+                </ul>
+             
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+
+        <!-- Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Products
+             
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <!-- Prodcut 1-2-->
+        <div class="row">
+            <div class="col-md-6 portfolio-item">
+                <a href="#">
+                     <center><img  width="250" height="300" src="assets/images/Diapers.png" alt="..." /></center>
+                </a><br>
+				<label for="1">Diapers (Item1)</label>
+				<button class="addfav" id="Item2">Add to Cart</button>
+           
+                <p>
+Pampers Ichiban拉拉褲5大優點！
+新升級!360°超透氣：透氣腰圍及內表層雲感舒適 360°彈力腰圍：親膚合身，輕鬆穿脫不勒肚 羽毛般超柔軟：輕柔內表層給寶寶柔軟呵護 超吸收：三條神奇通道，快速吸收預防溢漏 日本銷量No.1</p>
+            </div>
+            <div class="col-md-6 portfolio-item">
+                <a href="#">
+                      <center><img  width="250" height="300" src="assets/images/Milkpowder.png" alt="..." /></center>
+                </a><br>
+						<label for="2">Milkpowde (Item2)</label>
+						<button class="addfav" id="Item2">Add to Cart</button>
+          
+                <p>為研發更貼近寶寶需求的配方，日本研究團隊自1972年起持續研究6000名以上日本媽媽的母乳樣本，超過20萬名寶寶哺乳量、排便量、追蹤成長發育調查。以先進的科技與高品質的管理，並結合大數據研究，研發最適合東方寶寶營養的配方。</p>
+            </div>
+        </div>
+
+
+        <!-- Prodcut 2-3 -->
+        <div class="row">
+            <div class="col-md-6 portfolio-item">
+                <a href="#">
+                    <center><img width="300" height="300"src="assets/images/Tableware.png" alt="..." /></center>
+                </a><br>
+						<label for="3">Tableware (Item3)</label>
+						<button class="addfav" id="Item2">Add to Cart</button>
+             <P>所有嬰幼兒及兒童產品，均禁止添加有毒有害重金屬。所有嬰幼兒、兒童產品及玩具，均禁止使用雙酚A及各種塑化劑。所有嬰幼兒、兒童產品及玩具，均緊守健康與安全風險零容忍標準。</P>
+   
+		       </div>
+			   
+			   
+            <div class="col-md-6 portfolio-item">
+                <a href="#">
+                    <center><img  width="300" height="300" src="assets/images/toy.png" alt="..." /></center>
+                </a><br>
+						<label for="4">Toy (Item4)</label>
+						<button class="addfav" id="Item2">Add to Cart</button>
+            <p>著重培養兒童的創意，手腳協調和藝術細胞，教學配套充足，讓孩子有最大空間發展 </P>
+            </div>
+        </div>
+   <center> <label for="1-4">Add all item</label><button class="addmore">Put</button>
+<div class="mbr-section-btn">
+                <center> <a href="/checkoutlist">Check Out!</a>
+
+            </div>
+
+    
+	
+   
+        
+        <div class="copyright">
+        	<div class="container">
+        		<p>Copyright &copy; Kwan </p>
+        	</div>
+        </div>
+	</footer>
+
+	
+    <!-- jQuery -->
+    <script src="js/jquery-1.11.3.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+
+
+</body>
+</html>
